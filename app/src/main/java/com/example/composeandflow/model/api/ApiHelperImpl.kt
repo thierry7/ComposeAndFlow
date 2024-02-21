@@ -1,4 +1,4 @@
-package com.example.composeandflow
+package com.example.composeandflow.model.api
 
 import kotlinx.coroutines.flow.flow
 

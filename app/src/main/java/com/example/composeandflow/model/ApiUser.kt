@@ -1,4 +1,4 @@
-package com.example.composeandflow
+package com.example.composeandflow.model
 
 import com.google.gson.annotations.SerializedName
 

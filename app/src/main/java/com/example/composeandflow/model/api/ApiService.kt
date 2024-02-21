@@ -1,5 +1,6 @@
-package com.example.composeandflow
+package com.example.composeandflow.model.api
 
+import com.example.composeandflow.model.ApiUser
 import retrofit2.http.GET
 
 interface ApiService {

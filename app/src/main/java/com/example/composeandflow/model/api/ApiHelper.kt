@@ -1,5 +1,6 @@
-package com.example.composeandflow
+package com.example.composeandflow.model.api
 
+import com.example.composeandflow.model.ApiUser
 import kotlinx.coroutines.flow.Flow
 
 interface ApiHelper {

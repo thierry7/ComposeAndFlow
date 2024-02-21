@@ -1,8 +1,8 @@
-package com.example.composeandflow
+package com.example.composeandflow.view
 
+import android.R.style
 import android.annotation.SuppressLint
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
@@ -36,10 +36,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import coil.compose.rememberImagePainter
+import com.example.composeandflow.RetrofitBuilder
+import com.example.composeandflow.UiState
+import com.example.composeandflow.model.ApiUser
+import com.example.composeandflow.model.api.ApiHelperImpl
 import com.example.composeandflow.ui.theme.ComposeAndFlowTheme
+import com.example.composeandflow.utils.DefaultDispatcherProvider
+import com.example.composeandflow.viewModel.SingleNetworkCallViewModel
+import com.example.composeandflow.viewModel.ViewModelFactory
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -60,8 +68,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        }
-
+    }
     private fun setupViewModel() {
         viewModel = ViewModelProvider(
             this,
@@ -71,9 +78,7 @@ class MainActivity : AppCompatActivity() {
             )
         )[SingleNetworkCallViewModel::class.java]
     }
-    }
-
-
+}
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -96,58 +101,50 @@ fun MainScreen(viewModel: SingleNetworkCallViewModel) {
         }
     )
 }
-
 @Composable
-fun MessageCard(msg: ApiUser) {
+fun UserCard(user: ApiUser) {
     // Add padding around our message
-
     Row(modifier = Modifier.padding(all = 8.dp)) {
         Image(
-            painter = painterResource(R.drawable.ic_launcher_background),
+            painter = rememberImagePainter(user.avatar),
             contentDescription = "Contact profile picture",
             modifier = Modifier
-                // Set image size to 40 dp
-                .size(40.dp)
-                // Clip image to be shaped as a circle
+                .size(80.dp)
                 .clip(CircleShape)
         )
-
-        // Add a horizontal space between the image and the column
         Spacer(modifier = Modifier.width(8.dp))
 
         Column {
-            Text(text = msg.name)
-            // Add a vertical space between the author and message texts
+            Text(text = user.name, style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = msg.email)
+            Text(text = user.email, style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground)
         }
     }
-
 }
 @Composable
 fun UserList(uiState: UiState<List<ApiUser>>) {
     when (uiState) {
         is UiState.Loading -> {
-            // Show loading indicator
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(16.dp),
+                    .padding(20.dp),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
             }
         }
         is UiState.Success -> {
-            // Display the list of users
             LazyColumn {
                 items(uiState.data) { user ->
-                    MessageCard(user)
+                    println(user)
+                    UserCard(user)
                 }
             }
         }
         is UiState.Error -> {
-            // Show error message
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -158,6 +155,4 @@ fun UserList(uiState: UiState<List<ApiUser>>) {
             }
         }
     }
-
-
 }

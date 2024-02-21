@@ -1,7 +1,11 @@
-package com.example.composeandflow
+package com.example.composeandflow.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.composeandflow.UiState
+import com.example.composeandflow.model.ApiUser
+import com.example.composeandflow.model.api.ApiHelper
+import com.example.composeandflow.utils.DispatcherProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch

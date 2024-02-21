@@ -1,4 +1,4 @@
-package com.example.composeandflow
+package com.example.composeandflow.utils
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
