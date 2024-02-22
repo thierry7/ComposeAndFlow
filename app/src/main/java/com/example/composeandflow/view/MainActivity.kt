@@ -1,11 +1,13 @@
 package com.example.composeandflow.view
 
-import android.R.style
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +38,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import coil.compose.rememberImagePainter
@@ -47,6 +50,9 @@ import com.example.composeandflow.ui.theme.ComposeAndFlowTheme
 import com.example.composeandflow.utils.DefaultDispatcherProvider
 import com.example.composeandflow.viewModel.SingleNetworkCallViewModel
 import com.example.composeandflow.viewModel.ViewModelFactory
+import com.google.gson.annotations.SerializedName
+import java.io.Serial
+import java.io.Serializable
 
 
 class MainActivity : AppCompatActivity() {
@@ -69,6 +75,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun setupViewModel() {
         viewModel = ViewModelProvider(
             this,
@@ -79,6 +86,7 @@ class MainActivity : AppCompatActivity() {
         )[SingleNetworkCallViewModel::class.java]
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -101,10 +109,20 @@ fun MainScreen(viewModel: SingleNetworkCallViewModel) {
         }
     )
 }
+
 @Composable
 fun UserCard(user: ApiUser) {
-    // Add padding around our message
-    Row(modifier = Modifier.padding(all = 8.dp)) {
+    val context = LocalContext.current.applicationContext
+
+    Row(modifier = Modifier
+        .padding(all = 8.dp)
+        .clickable {
+            val navigate = Intent(context, CustomUserProfile::class.java)
+            navigate.putExtra("USERPOJO", user )
+            navigate.addFlags(FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(navigate)
+        }
+    ) {
         Image(
             painter = rememberImagePainter(user.avatar),
             contentDescription = "Contact profile picture",
@@ -115,14 +133,19 @@ fun UserCard(user: ApiUser) {
         Spacer(modifier = Modifier.width(8.dp))
 
         Column {
-            Text(text = user.name, style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onBackground)
+            Text(
+                text = user.name, style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onBackground
+            )
             Spacer(modifier = Modifier.height(4.dp))
-            Text(text = user.email, style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onBackground)
+            Text(
+                text = user.email, style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onBackground
+            )
         }
     }
 }
+
 @Composable
 fun UserList(uiState: UiState<List<ApiUser>>) {
     when (uiState) {
@@ -136,6 +159,7 @@ fun UserList(uiState: UiState<List<ApiUser>>) {
                 CircularProgressIndicator()
             }
         }
+
         is UiState.Success -> {
             LazyColumn {
                 items(uiState.data) { user ->
@@ -144,6 +168,7 @@ fun UserList(uiState: UiState<List<ApiUser>>) {
                 }
             }
         }
+
         is UiState.Error -> {
             Box(
                 modifier = Modifier
