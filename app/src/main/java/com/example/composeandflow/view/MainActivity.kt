@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,16 +24,16 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.example.composeandflow.model.api.RetrofitBuilder
-import com.example.composeandflow.model.api.UiState
 import com.example.composeandflow.model.ApiItems
 import com.example.composeandflow.model.api.ApiHelperImpl
+import com.example.composeandflow.model.api.RetrofitBuilder
+import com.example.composeandflow.model.api.UiState
 import com.example.composeandflow.ui.theme.ComposeAndFlowTheme
 import com.example.composeandflow.viewModel.SingleNetworkCallViewModel
 import com.example.composeandflow.viewModel.ViewModelFactory
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: SingleNetworkCallViewModel
@@ -106,7 +105,7 @@ fun ItemList(uiState: UiState<List<ApiItems>>) {
 fun ItemCard(items: ApiItems) {
 
     Row(modifier = Modifier
-        .padding(all = 10.dp)
+        .padding(all = 5.dp)
     ) {
 
         Column(Modifier.width(1000.dp)) {
