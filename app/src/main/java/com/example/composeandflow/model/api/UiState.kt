@@ -1,4 +1,4 @@
-package com.example.composeandflow
+package com.example.composeandflow.model.api
 
 sealed interface UiState<out T>{
     data class Success<T>(val data: T) : UiState<T>
